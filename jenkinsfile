@@ -4,7 +4,8 @@ def mavenHome = tool name: "maven3.8.4"
 properties([buildDiscarder(logRotator(artifactDaysToKeepStr: '', artifactNumToKeepStr: '5', daysToKeepStr: '', numToKeepStr: '5')), [$class: 'JobLocalConfiguration', changeReasonComment: ''], pipelineTriggers([pollSCM('* * * * *')])])
  echo " Job name is :${env.job_name}" 
  echo " Node name is :${env.node_name}" 
- echo " Build number is :${env.Build_Number}" 
+ echo " Build number is :${env.Build_Number}"
+ try{
  stage('CheckoutCpode')
 {
     git branch: 'development', credentialsId: 'e9e06cdc-b22e-4eb6-99d1-b66270e889e2', url: 'https://github.com/kamasani-sarala/maven-web-application.git'
@@ -30,4 +31,11 @@ sh "scp -o StrictHostKeyChecking=no target/maven-web-application.war ec2-user@17
 }
 }
 */
-}
+}catch(e){
+currentBuild.result = "FAILED"
+    throw e
+    }
+    finally{
+    sendSlackNotifications(currentbuild.result)
+
+}//node closing
