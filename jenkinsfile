@@ -6,6 +6,7 @@ properties([buildDiscarder(logRotator(artifactDaysToKeepStr: '', artifactNumToKe
  echo " Node name is :${env.node_name}" 
  echo " Build number is :${env.Build_Number}"
  try{
+ sendSlackNotifications('STARTED')
  stage('CheckoutCpode')
 {
     git branch: 'development', credentialsId: 'e9e06cdc-b22e-4eb6-99d1-b66270e889e2', url: 'https://github.com/kamasani-sarala/maven-web-application.git'
