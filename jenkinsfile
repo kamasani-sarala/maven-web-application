@@ -15,12 +15,14 @@ stage('Build')
 {
     sh "${mavenHome}/bin/mvn clean package"
 }
+stage('TriggerDownStreamJob'){
+Build job:'pipelinescriptwithbuildparameters'
+}
 /*
 stage('ExecuteSonarQubeReport')
 {
 sh "${mavenHome}/bin/mvn sonar:sonar"
 }
-
 stage('UploadArtifactsIntoNexus')
 {
 sh "${mavenHome}/bin/mvn deploy"
